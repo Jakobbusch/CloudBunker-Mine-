@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white; " styleClass="anchor" stylesheets="@../../../network/client/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="user.view.logInView.LoginController">
+   <children>
+      <Button layoutX="238.0" layoutY="315.0" mnemonicParsing="false" onAction="#onLoginButton" prefHeight="31.0" prefWidth="124.0" text="Login" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
+      <TextField fx:id="username" alignment="CENTER" layoutX="268.0" layoutY="137.0" promptText="Username" />
+      <Label layoutX="166.0" layoutY="141.0" styleClass="username" text="User name:" />
+      <Label layoutX="169.0" layoutY="214.0" styleClass="password" text="Password:" />
+      <Label layoutX="138.0" layoutY="70.0" text="VIA CLOUD BUNKER" textFill="WHITE">
+         <font>
+            <Font name="Stencil" size="35.0" />
+         </font>
+      </Label>
+      <PasswordField fx:id="password" alignment="CENTER" layoutX="268.0" layoutY="210.0" promptText="password" />
+   </children>
+
+
+</AnchorPane>

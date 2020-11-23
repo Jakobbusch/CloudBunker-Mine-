@@ -1,0 +1,25 @@
+.anchor{
+    -fx-background-image:url(../../images/logoLogin.png);
+    -fx-background-position: center center;
+    -fx-background-insets: -1000,0,0,0; /*doesnt work for whatever reason*/
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100%;
+}
+.button {
+    -fx-background-color: #4085c6; /* blue */
+}
+
+.menu-button{
+    -fx-background-color: #4085c6; /* blue */
+}
+
+.choice-box{
+    -fx-background-color: #4085c6; /* blue */
+}
+.username{
+    -fx-text-fill: white;
+}
+.password{
+    -fx-text-fill: white;
+}
+

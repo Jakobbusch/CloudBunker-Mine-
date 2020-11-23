@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="335.0" prefWidth="335.0" styleClass="anchor" stylesheets="@../../../network/client/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="user.view.editProfileView.EditProfileController">
+   <children>
+      <TextField fx:id="username" alignment="CENTER" editable="false" layoutX="92.0" layoutY="56.0" mouseTransparent="true" pickOnBounds="false" />
+      <Text fx:id="username1" fill="WHITE" layoutX="139.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
+      <Text fx:id="password1" fill="WHITE" layoutX="141.0" layoutY="128.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
+      <TextField fx:id="password" alignment="CENTER" layoutX="93.0" layoutY="142.0" />
+      <Text fx:id="email1" fill="WHITE" layoutX="149.0" layoutY="214.0" strokeType="OUTSIDE" strokeWidth="0.0" text="E-Mail" />
+      <TextField fx:id="email" alignment="CENTER" layoutX="93.0" layoutY="233.0" />
+      <Button graphicTextGap="5.0" layoutX="94.0" layoutY="278.0" mnemonicParsing="false" onAction="#onSaveButton" text="Save" textFill="WHITE" />
+      <Button layoutX="184.0" layoutY="278.0" mnemonicParsing="false" onAction="#onBackButton" text="Go Back" textFill="WHITE" />
+   </children>
+</AnchorPane>

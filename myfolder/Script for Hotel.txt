@@ -1,0 +1,168 @@
+
+create schema "Hotel_JCA";
+set search_path = 'Hotel_JCA';
+
+/*Exercise example chapter 4, exercise 7.10 & 7.11*/
+
+CREATE DOMAIN dates AS DATE CONSTRAINT con_datefrom CHECK (VALUE > '2018-01-12');
+CREATE domain roomnumbers AS INTEGER CONSTRAINT con_roomnumbers CHECK 
+(VALUE > 1 and VALUE < 100);
+CREATE DOMAIN roomtype CHAR(6) CHECK (VALUE IN ('Single', 'Double', 'Family'));
+CREATE domain prices AS DECIMAL(5,2) CONSTRAINT con_price CHECK 
+(VALUE BETWEEN 10.00 AND 100.00);
+
+CREATE TABLE hotel (
+	hotelno SERIAL, 
+	hotelname VARCHAR(50) NOT NULL, 
+	city VARCHAR(50) NOT NULL,
+	CONSTRAINT hotelpk PRIMARY KEY(hotelno)
+);
+
+CREATE TABLE Room(
+   RoomNo    INTEGER NOT NULL,
+   hotelNo   INTEGER NOT NULL,
+   type      VARCHAR (10) NOT NULL,
+   price     prices NOT NULL,
+   CONSTRAINT Room_pk PRIMARY KEY (roomNo, hotelno),
+   CONSTRAINT Room_FK FOREIGN KEY (hotelNo) REFERENCES hotel(hotelNo) 
+ON UPDATE CASCADE
+);
+
+CREATE TABLE Guest (
+	guestNo serial PRIMARY KEY, 
+	guestName VARCHAR(30), 
+	guestAddress VARCHAR(30)
+);
+
+CREATE TABLE Booking (
+	hotelNo INTEGER NOT NULL, 
+	guestNo INTEGER NOT NULL , 
+	dateFrom dates NOT NULL, 
+ 	dateTo dates NOT NULL, 
+	roomNo INTEGER NOT NULL, 
+	CONSTRAINT booking_PK PRIMARY KEY (hotelNo, guestNo, dateFrom),
+	CONSTRAINT booking_hotelNo FOREIGN KEY (hotelNo) REFERENCES hotel(hotelNo)
+ON UPDATE CASCADE ON DELETE SET NULL,
+	CONSTRAINT booking_guestNo FOREIGN KEY (guestNo) REFERENCES guest(guestNo)
+ON UPDATE CASCADE ON DELETE SET NULL,
+	CONSTRAINT booking_roomNo_hotelNo FOREIGN KEY (roomNo, hotelNo) REFERENCES room(roomNo, hotelNo)
+ON UPDATE CASCADE ON DELETE SET NULL
+);
+
+/* Populating with bookings */
+INSERT INTO hotel (hotelname, city) VALUES ('Grosvenor', 'London');
+INSERT INTO hotel (hotelname, city) VALUES ('Jorgensen', 'Berlin');
+INSERT INTO hotel (hotelname, city) VALUES ('Opus', 'Aarhus');
+INSERT INTO hotel (hotelname, city) VALUES ('Danica', 'Copenhagen');
+
+INSERT INTO room VALUES (101, 1, 'Single',25);
+INSERT INTO room VALUES (102, 1, 'Single',25);
+INSERT INTO room VALUES (201, 1, 'Double',40);
+INSERT INTO room VALUES (202, 1, 'Double',45);
+INSERT INTO room VALUES (301, 1, 'Family',60);
+INSERT INTO room VALUES (101, 2, 'Single',35);
+INSERT INTO room VALUES (102, 2, 'Single',40);
+INSERT INTO room VALUES (201, 2, 'Double',40);
+INSERT INTO room VALUES (202, 2, 'Double',45);
+INSERT INTO room VALUES (203, 2, 'Double',50);
+INSERT INTO room VALUES (204, 2, 'Double',45);
+INSERT INTO room VALUES (205, 2, 'Double',50);
+INSERT INTO room VALUES (101, 3, 'Double',75);
+INSERT INTO room VALUES (201, 3, 'Double',75);
+INSERT INTO room VALUES (202, 3, 'Family',100);
+INSERT INTO room VALUES (203, 3, 'Family',100);
+INSERT INTO room VALUES (101, 4, 'Single', 30);
+INSERT INTO room VALUES (102, 4, 'Single', 30);
+INSERT INTO room VALUES (103, 4, 'Double', 50);
+
+INSERT INTO guest (guestname, guestaddress) VALUES ('Poul', 'Solbjerg');
+INSERT INTO guest (guestname, guestaddress) VALUES ('Henrik', 'Silkeborg');
+INSERT INTO guest (guestname, guestaddress) VALUES ('Ib', 'London');
+INSERT INTO guest (guestname, guestaddress) VALUES ('Bo', 'New York');
+INSERT INTO guest (guestname, guestaddress) VALUES ('Ole', 'London');
+INSERT INTO guest (guestname, guestaddress) VALUES ('Jan', 'London');
+INSERT INTO guest (guestname, guestaddress) VALUES ('Allan', 'Barcelona');
+INSERT INTO guest (guestname, guestaddress) VALUES ('Mona', 'London');
+INSERT INTO guest (guestname, guestaddress) VALUES ('Lars', 'Copenhagen');
+INSERT INTO guest (guestname, guestaddress) VALUES ('RIB', 'London');
+INSERT INTO guest (guestname, guestaddress) VALUES ('Line', 'Warsaw');
+INSERT INTO guest (guestname, guestaddress) VALUES ('Knud', 'Warsaw');
+INSERT INTO guest (guestname, guestaddress) VALUES ('Behnan', 'Barcelona');
+INSERT INTO guest (guestname, guestaddress) VALUES ('Trine', 'New York');
+INSERT INTO guest (guestname, guestaddress) VALUES ('Peter', 'Barcelona');
+INSERT INTO guest (guestname, guestaddress) VALUES ('Søren', 'Warsaw');
+INSERT INTO guest (guestname, guestaddress) VALUES ('Jens', 'New York');
+INSERT INTO guest (guestname, guestaddress) VALUES ('Else', 'Warsaw');
+INSERT INTO guest (guestname, guestaddress) VALUES ('Sofia', 'Copenhagen');
+INSERT INTO guest (guestname, guestaddress) VALUES ('Ingrid', 'New York');
+DELETE FROM guest WHERE guestno = 13;
+DELETE FROM guest WHERE guestno = 21;
+
+
+
+INSERT INTO booking VALUES (1, 1, '2018-08-12', '2018-08-15',  102);
+INSERT INTO booking VALUES (1, 10, '2018-09-08' , '2018-09-28', 101);
+INSERT INTO booking VALUES (1, 11, '2018-09-01', '2018-09-10',301);
+INSERT INTO booking VALUES (2, 12, to_date('19-08-2018','DD-MM-YYYY'),to_date('29-08-2018','DD-MM-YYYY'), 101);
+INSERT INTO booking VALUES (3, 2, to_date('11-04-2018','DD-MM-YYYY'), to_date('18-04-2018','DD-MM-YYYY'), 202);
+INSERT INTO booking VALUES (3, 3, to_date('31-08-2018','DD-MM-YYYY'), to_date('15-09-2018','DD-MM-YYYY'), 203);
+INSERT INTO booking VALUES (3, 4, to_date('18-07-2018','DD-MM-YYYY'), to_date('27-07-2018','DD-MM-YYYY'), 101);
+INSERT INTO booking VALUES (2, 12, to_date('12-05-2018','DD-MM-YYYY'), to_date('22-05-2018','DD-MM-YYYY'), 201);
+INSERT INTO booking VALUES (2, 14, to_date('17-06-2018','DD-MM-YYYY'), to_date('30-06-2018','DD-MM-YYYY'), 101);
+INSERT INTO booking VALUES (2, 15, to_date('17-06-2018','DD-MM-YYYY'), to_date('30-06-2018','DD-MM-YYYY'), 203);
+INSERT INTO booking VALUES (1, 5, to_date('21-06-2018','DD-MM-YYYY'), to_date('28-06-2018','DD-MM-YYYY'), 102);
+INSERT INTO booking VALUES (1, 6, to_date('21-07-2018','DD-MM-YYYY'), to_date('01-08-2018','DD-MM-YYYY'), 201);
+INSERT INTO booking VALUES (1, 7, to_date('15-06-2018','DD-MM-YYYY'), to_date('20-06-2018','DD-MM-YYYY'), 301);
+INSERT INTO booking VALUES (1, 8, to_date('15-10-2018','DD-MM-YYYY'), to_date('30-10-2018','DD-MM-YYYY'), 201);
+INSERT INTO booking VALUES (1, 9, to_date('17-09-2018','DD-MM-YYYY'), to_date('03-10-2018','DD-MM-YYYY'), 202);
+INSERT INTO booking VALUES (3, 15, to_date('15-10-2018','DD-MM-YYYY'), to_date('30-10-2018','DD-MM-YYYY'), 101);
+INSERT INTO booking VALUES (1, 16, to_date('05-05-2018','DD-MM-YYYY'), to_date('17-05-2018','DD-MM-YYYY'), 201);
+INSERT INTO booking VALUES (3, 17, to_date('12-07-2018','DD-MM-YYYY'), to_date('22-07-2018','DD-MM-YYYY'), 203);
+INSERT INTO booking VALUES (2, 18, to_date('29-05-2018','DD-MM-YYYY'), to_date('31-05-2018','DD-MM-YYYY'), 205);
+INSERT INTO booking VALUES (2, 19, to_date('12-07-2018','DD-MM-YYYY'), to_date('22-07-2018','DD-MM-YYYY'), 204);
+INSERT INTO booking VALUES (1, 20, to_date('29-09-2018','DD-MM-YYYY'), to_date('31-10-2018','DD-MM-YYYY'), 202);
+INSERT INTO booking VALUES (1, 11, to_date('29-05-2018','DD-MM-YYYY'), to_date('31-05-2018','DD-MM-YYYY'), 301);
+INSERT INTO booking VALUES (1, 1, '2018-08-01', '2018-08-04', 301);
+INSERT INTO booking VALUES (1, 11, '2018-08-14', '2018-08-24', 202);
+INSERT INTO booking VALUES (1, 3, '2019-08-01', '2019-08-07', 202);
+INSERT INTO booking VALUES (1, 4, '2019-07-29', '2019-08-04', 301);
+INSERT INTO booking VALUES (2, 12, '2019-08-11', '2019-08-18', 201);
+INSERT INTO booking VALUES (3, 11, '2019-08-13', '2019-08-25', 203);
+INSERT INTO booking VALUES (3, 10, '2019-08-14', '2019-08-25', 202);
+INSERT INTO booking VALUES (3, 9, '2019-08-14', '2019-08-25', 101);
+INSERT INTO booking VALUES (1, 9, '2019-08-10', '2019-08-15', 201);
+INSERT INTO booking VALUES (1, 5, '2018-08-11', '2019-08-15', 201);
+
+select * from hotel;
+/*Problems with hotelnumbers*/
+Update hotel set hotelno = 11 where hotelname = 'Grosvenor';
+Update hotel set hotelno = 12 where hotelname = 'Opus';
+Update hotel set hotelno = 13 where hotelname = 'Danica';
+Update hotel set hotelno = 14 where hotelname = 'Jorgensen';
+Update hotel set hotelno = 1 where hotelname = 'Grosvenor';
+Update hotel set hotelno = 2 where hotelname = 'Opus';
+Update hotel set hotelno = 3 where hotelname = 'Danica';
+Update hotel set hotelno = 4 where hotelname = 'Jorgensen';
+
+Select * from guest;
+update guest set guestno = 1 where guestname ='Poul';
+update guest set guestno = 2 where guestname ='Henrik';
+update guest set guestno = 3 where guestname ='Ib';
+update guest set guestno = 4 where guestname ='Bo';
+update guest set guestno = 5 where guestname ='Ole';
+update guest set guestno = 6 where guestname ='Jan';
+update guest set guestno = 7 where guestname ='Allan';
+update guest set guestno = 8 where guestname ='Mona';
+update guest set guestno = 9 where guestname ='Lars';
+update guest set guestno = 10 where guestname ='RIB';
+update guest set guestno = 11 where guestname ='Line';
+update guest set guestno = 12 where guestname ='Knud';
+update guest set guestno = 13 where guestname ='Behnan';
+update guest set guestno = 14 where guestname ='Trine';
+update guest set guestno = 15 where guestname ='Peter';
+update guest set guestno = 16 where guestname ='Søren';
+update guest set guestno = 17 where guestname ='Jens';
+update guest set guestno = 18 where guestname ='Else';
+update guest set guestno = 19 where guestname ='Sofia';
+update guest set guestno = 20 where guestname ='Ingrid';
+
